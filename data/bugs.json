@@ -232,7 +232,7 @@
         "symptom": "performance",
         "status": "fixed",
         "characteristics": [
-            "GADT"
+            "Poly. ADT"
         ],
         "url": null,
         "test-case": [
