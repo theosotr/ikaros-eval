@@ -46,6 +46,50 @@ def load_data(data_dir):
     return data
 
 
+def print_table(title, data):
+    map_oracles = {
+        "z3": "RPG",
+        "construction": "RefPG",
+    }
+    new_data = {
+        "RPG": {
+            "scalac": 0,
+            "javac": 0,
+            "ghc": 0
+        },
+        "RefPG": {
+            "scalac": 0,
+            "javac": 0,
+            "ghc": 0,
+        }
+    }
+    for key, times in data.items():
+        compiler, oracle = tuple(key.split("_"))
+        oracle = map_oracles.get(oracle)
+        new_data[oracle][compiler] = len(list(times.values())[0])
+
+    # res should be a dict of dict in the following format:
+    # {"row name": {"column name": value, ...}, ...}
+    def print_line(columns, values):
+        row_format = "{:<10}" * len(columns)
+        print(row_format.format(*values))
+
+    header = ("Pat Gen", "scalac", "javac", "ghc", "Total")
+
+    row_format = "{:<10}" * len(header)
+    lenght = 10 * len(header)
+    print(title.center(lenght))
+    print(lenght * "=")
+    print(row_format.format(*header))
+    print(lenght * "-")
+
+    for pat_gen, values in new_data.items():
+        total = sum(val for val in values.values())
+        row = [pat_gen] + [values["scalac"], values["javac"], values["ghc"],
+                           total]
+        print_line(header, row)
+
+
 def plot_evolution_diagram(data, output_dir):
     map_oracles = {
         "Z3": "RPG",
@@ -111,6 +155,7 @@ def main():
     args = get_args()
     data = load_data(args.data)
     plot_evolution_diagram(data, args.output)
+    print_table("Table 1c", data)
 
 
 if __name__ == "__main__":
