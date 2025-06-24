@@ -1,0 +1,251 @@
+{
+    "DOTTY-1": {
+        "language": "scala",
+        "version": "3.6.3",
+        "symptom": "fn-exhaustiveness",
+        "status": "fixed",
+        "characteristics": [
+            "Poly. ADT",
+            "constant"
+        ],
+        "url": "https://github.com/scala/scala3/issues/22590",
+        "test-case": [
+			"sealed trait T_A",
+			"case class CC_B[T](a: T) extends T_A",
+
+			"@main def test() = {",
+			"  val v_a: CC_B[Int] = CC_B(10)",
+			"  val v_b: Int = v_a match{",
+			"	case CC_B(12) => 0",
+			"  }",
+			"}"
+        ]
+    },
+    "DOTTY-2": {
+        "language": "scala",
+        "version": "3.4.1",
+        "symptom": "fn-exhaustiveness",
+        "status": "fixed",
+        "characteristics": [
+            "GADT"
+        ],
+        "url": "https://github.com/scala/scala3/issues/20132",
+        "test-case": [
+			"sealed trait T_B[B]",
+
+			"case class CC_A()",
+			"case class CC_C[B]() extends T_B[B]",
+			"case class CC_D[B](b: T_B[B]) extends T_B[CC_A]",
+
+			"val v_a: T_B[CC_A] = CC_D(CC_D(null))",
+			"val v_b: Int = v_a match {",
+			"  case CC_C()       => 0",
+			"  case CC_D(CC_C()) => 1",
+			"}"
+        ]
+    },
+    "DOTTY-3": {
+        "language": "scala",
+        "version": "3.4.1",
+        "symptom": "fn-exhaustiveness",
+        "status": "fixed",
+        "characteristics": [
+            "GADT"
+        ],
+        "url": "https://github.com/scala/scala3/issues/20128",
+        "test-case": [
+			"sealed trait T_A[A]",
+			"case class CC_B[A](a: T_A[A]) extends T_A[Byte]",
+			"case class CC_E[A](b: T_A[A]) extends T_A[Byte]",
+
+			"val v_a: T_A[Byte] = CC_E(CC_B(null))",
+			"val v_b: Int = v_a match {",
+			"  case CC_E(CC_E(_)) => 0",
+			"  case CC_B(_)       => 1",
+			"}"
+        ]
+    },
+    "DOTTY-4": {
+        "language": "scala",
+        "version": "3.4.1",
+        "symptom": "fn-exhaustiveness",
+        "status": "fixed",
+        "characteristics": [
+            "GADT"
+        ],
+        "url": "https://github.com/scala/scala3/issues/20129",
+        "test-case": [
+			"sealed trait T_A[A]",
+			"case class CC_B[A](a: T_A[A], c: T_A[A]) extends T_A[Char]",
+			"case class CC_C[A]() extends T_A[A]",
+			"case class CC_G() extends T_A[Char]",
+
+			"val v_a: T_A[Char] = CC_B(CC_G(), CC_C())",
+			"val v_b: Int = v_a match {",
+			"  case CC_C()                   => 0",
+			"  case CC_G()                   => 1",
+			"  case CC_B(CC_B(_, _), CC_C()) => 2",
+			"  case CC_B(CC_C(), CC_C())     => 3",
+			"  case CC_B(_, CC_G())          => 4",
+			"  case CC_B(_, CC_B(_, _))      => 5",
+			"}"
+        ]
+    },
+    "DOTTY-5": {
+        "language": "scala",
+        "version": "3.4.1",
+        "symptom": "fn-exhaustiveness",
+        "status": "fixed",
+        "characteristics": [
+            "GADT"
+        ],
+        "url": "https://github.com/scala/scala3/issues/20130",
+        "test-case": [
+			"sealed trait T_A[B]",
+			"sealed trait T_B[C]",
+			"case class CC_B[C]() extends T_A[T_B[C]]",
+			"case class CC_C[B, C](c: T_A[B], d: T_B[C]) extends T_B[C]",
+			"case class CC_E[C]() extends T_B[C]",
+
+			"val v_a: T_B[Int] = CC_C(null, CC_E())",
+			"val v_b: Int = v_a match {",
+			"  case CC_C(_, CC_C(_, _)) => 0",
+			"  case CC_E()              => 5",
+			"}"
+        ]
+    },
+    "DOTTY-6": {
+        "language": "scala",
+        "version": "3.4.1",
+        "symptom": "fn-exhaustiveness",
+        "status": "fixed",
+        "characteristics": [
+            "GADT",
+            "null"
+        ],
+        "url": "https://github.com/scala/scala3/issues/20131",
+        "test-case": [
+			"sealed trait T_A",
+			"sealed trait T_B[A, B]",
+			"case class CC_A[A, C, D](a: T_B[C, D]) extends T_B[A, T_B[C, D]]",
+
+			"case class CC_B() extends T_A",
+			"case class CC_C[A, B]() extends T_A",
+			"case class CC_D[C, D](b: T_B[C, D], c: T_A)",
+			"	extends T_B[CC_A[Int, Byte, Int], T_B[C, D]]",
+
+			"val v_a: T_B[CC_A[Int, Byte, Int], T_B[Char, Char]] = CC_D(null, CC_B())",
+			"val v_b: Int = v_a match {",
+			"  case CC_A(_)         => 0",
+			"  case CC_D(_, CC_C()) => 1",
+			"}"
+        ]
+    },
+    "DOTTY-7": {
+        "language": "scala",
+        "version": "3.6.1",
+        "symptom": "fn-exhaustiveness",
+        "status": "confirmed",
+        "characteristics": [
+            "GADT",
+            "constant",
+            "null"
+        ],
+        "url": "https://github.com/scala/scala3/issues/22064",
+        "test-case": [
+			"sealed trait T_A[B]",
+			"case class CC_C(a: Int, b: T_A[Int]) extends T_A[Char]",
+
+			"val v_a: T_A[Char] = null",
+			"val v_b: Int = v_a match{",
+			"  case CC_C(0, _) => 0",
+			"}"
+        ]
+    },
+    "DOTTY-8": {
+        "language": "scala",
+        "version": "3.4.1",
+        "symptom": "fp-redundancy",
+        "status": "fixed",
+        "characteristics": [
+            "GADT",
+            "null"
+        ],
+        "url": "https://github.com/scala/scala3/issues/20121",
+        "test-case": [
+			"sealed trait T_A[A, B]",
+			"type X = T_A[",
+			"  Byte,",
+			"  Byte",
+			"]",
+			"case class CC_B[A](",
+			"    a: A",
+			") extends T_A[A, X]",
+			"val v_a: T_A[X, X] = CC_B(null)",
+
+			"val v_b = v_a match {",
+			"  case CC_B(_) => 0",
+			"  case _       => 1",
+			"}"
+        ]
+    },
+    "DOTTY-9": {
+        "language": "scala",
+        "version": "3.4.1",
+        "symptom": "fp-redundancy",
+        "status": "fixed",
+        "characteristics": [
+            "GADT",
+            "null"
+        ],
+        "url": "https://github.com/scala/scala3/issues/20122",
+        "test-case": [
+			"sealed trait T_B[C, D]",
+			"case class CC_A()",
+			"case class CC_B[A, C](a: A) extends T_B[C, CC_A]",
+			"case class CC_C[C, D](a: T_B[C, D])",
+			"	extends T_B[Int, CC_A]",
+			"case class CC_E(a: CC_C[Char, Byte])",
+			"val v_a: T_B[Int, CC_A] = CC_B(CC_E(CC_C(null)))",
+			"val v_b = v_a match {",
+			"  case CC_B(CC_E(CC_C(_))) => 0",
+			"  case _              => 1",
+			"}"
+        ]
+    },
+    "DOTTY-10": {
+        "language": "scala",
+        "version": "3.4.1",
+        "symptom": "fp-redundancy",
+        "status": "fixed",
+        "characteristics": [
+            "GADT",
+            "null"
+        ],
+        "url": "https://github.com/scala/scala3/issues/20123",
+        "test-case": [
+			"sealed trait T_A[A, B]",
+			"sealed trait T_B[C]",
+			"case class CC_D[A, C]() extends T_A[A, C]",
+			"case class CC_E() extends T_B",
+			"case class CC_G[A, C](c: C) extends T_A[A, C]",
+			"val v_a: T_A[Boolean, T_B[Boolean]] = CC_G(null)",
+			"val v_b = v_a match {",
+			"  case CC_D()  => 0",
+			"  case CC_G(_) => 1",
+			"}"
+        ]
+    },
+    "DOTTY-11": {
+        "language": "scala",
+        "version": "3.6.0-RC1",
+        "symptom": "performance",
+        "status": "fixed",
+        "characteristics": [
+            "GADT"
+        ],
+        "url": null",
+        "test-case": [
+        ]
+    }
+}
