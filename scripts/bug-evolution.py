@@ -29,6 +29,10 @@ def get_args():
         description='Study the evolution of bug detection')
     parser.add_argument("data", help="Directory with pickled data.")
     parser.add_argument("output", help="Directory to store the figure.")
+    parser.add_argument("--avoid-log-scale",
+                        default=False,
+                        action="store_true",
+                        help="Avoid using log scale in the y axis.")
     return parser.parse_args()
 
 
@@ -64,6 +68,8 @@ def print_table(title, data):
         }
     }
     for key, times in data.items():
+        if not times:
+            continue
         compiler, oracle = tuple(key.split("_"))
         oracle = map_oracles.get(oracle)
         new_data[oracle][compiler] = len(list(times.values())[0])
@@ -90,7 +96,7 @@ def print_table(title, data):
         print_line(header, row)
 
 
-def plot_evolution_diagram(data, output_dir):
+def plot_evolution_diagram(data, output_dir, log_scale):
     map_oracles = {
         "Z3": "RPG",
         "Construction": "RefPG",
@@ -104,9 +110,9 @@ def plot_evolution_diagram(data, output_dir):
                 plot_data[key] = []
             plot_data[key].extend(times)
 
-    all_times = set()
+    all_times = []
     for times in plot_data.values():
-        all_times.update(times)
+        all_times.extend(times)
 
     all_times = sorted(all_times)
 
@@ -135,12 +141,13 @@ def plot_evolution_diagram(data, output_dir):
     color_palette = sns.color_palette("colorblind")
 
     for i, (key, (times, counts)) in enumerate(standardized_data.items()):
-        times = np.array(times) / 3600
+        times = np.array(times)
         color = color_palette[i % len(color_palette)]
         ax.plot(times, counts, label=key, linestyle='-', linewidth=3,
                 color=color)
 
-    ax.set_yscale("log")
+    if log_scale:
+        ax.set_yscale("log")
 
     ax.set_xlabel("Time (hours)")
     ax.set_ylabel("Cumulative bug count")
@@ -154,7 +161,8 @@ def plot_evolution_diagram(data, output_dir):
 def main():
     args = get_args()
     data = load_data(args.data)
-    plot_evolution_diagram(data, args.output)
+    plot_evolution_diagram(data, args.output,
+                           log_scale=not args.avoid_log_scale)
     print_table("Table 1c", data)
 
 
