@@ -1,0 +1,3 @@
+[submodule "Ikaros"]
+	path = Ikaros
+	url = https://github.com/CyrilFMoser/Ikaros
