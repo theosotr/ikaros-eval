@@ -19,6 +19,7 @@ See TODO.
   * [RQ1: Bug-Finding Results (Section 5.2)](#rq1-bug-finding-results-section-52)
   * [RQ2: Bug and Test Case Characteristics (Section 5.3)](#rq2-bug-and-test-case-characteristics-section-53)
   * [RQ3: Performance (Section 5.4)](#rq3-performance-section-54)
+  * [Re-running Experiments and Reproducing Tables and Figures with New Data (Optional)](#re-running-experiments-and-reproducing-tables-and-figures-with-new-data-optional)
 
 # Overview
 
@@ -109,7 +110,7 @@ Options:
   -r, --redundancy
           If provided, Ikaros also checks for false positives in redundancy diagnostics
 
-  -r, --reduce
+      --reduce
           If provided, Ikaros attempts to minimize bug-triggering programs via reduction
 
   -h, --help
@@ -390,7 +391,7 @@ The resulting plot is saved to the
  host machine under `figures/evolution.pdf`.
 
 
-## RQ2: Test Case Characteristics (Section 5.3)
+## RQ2: Bug and Test Case Characteristics (Section 5.3)
 
 To address the second research question,
 we analyze the `data/bugs.json` file to reproduce Table 1b,
