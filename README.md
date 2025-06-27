@@ -571,8 +571,8 @@ However, we can approximate the results and extract the key takeaways.
 
 ### Step 1: Generate programs
 
-Run the following commands to generate a total of 1,000 programs
-per target language; 500 using RefPG and 500 using RPG
+Run the following commands to generate a total of 100 programs
+per target language; 50 using RefPG and 50 using RPG
 
 Estimated running time: 30 minutes.
 Note that runs involving Scala may take longer,
@@ -580,12 +580,12 @@ as `scalac` is significantly slower than the other compilers.
 
 
 ```
-ikaros@2a72c8b56b74:~$ ikaros --language scala --pattern-gen construction --iterations 500 --batch-size 1
-ikaros@2a72c8b56b74:~$ ikaros --language scala --pattern-gen z3 --iterations 500 --batch-size 1
-ikaros@2a72c8b56b74:~$ ikaros --language java --pattern-gen construction --iterations 500 --batch-size 1
-ikaros@2a72c8b56b74:~$ ikaros --language java --pattern-gen z3 --iterations 500 --batch-size 1
-ikaros@2a72c8b56b74:~$ ikaros --language haskell --pattern-gen construction --iterations 500 --batch-size 1
-ikaros@2a72c8b56b74:~$ ikaros --language haskell --pattern-gen z3 --iterations 500 --batch-size 1
+ikaros@2a72c8b56b74:~$ ikaros --language scala --pattern-gen construction --iterations 50 --batch-size 1
+ikaros@2a72c8b56b74:~$ ikaros --language scala --pattern-gen z3 --iterations 50 --batch-size 1
+ikaros@2a72c8b56b74:~$ ikaros --language java --pattern-gen construction --iterations 50 --batch-size 1
+ikaros@2a72c8b56b74:~$ ikaros --language java --pattern-gen z3 --iterations 50 --batch-size 1
+ikaros@2a72c8b56b74:~$ ikaros --language haskell --pattern-gen construction --iterations 50 --batch-size 1
+ikaros@2a72c8b56b74:~$ ikaros --language haskell --pattern-gen z3 --iterations 50 --batch-size 1
 ```
 
 ### Step 2: Collect statistics
@@ -643,7 +643,7 @@ Key Takeaways:
 * Compilation time constitutes the dominant overhead,
   ranging from hundreds to thousands of milliseconds.
 
-* SMT solving time increases 5x without a timeout, but remains relatively
+* SMT solving time increases 3--5x without a timeout, but remains relatively
   minor overall.
 
 
