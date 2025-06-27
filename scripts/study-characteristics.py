@@ -10,8 +10,6 @@ import seaborn as sns
 
 plt.style.use('default')
 sns.set(style="whitegrid")
-plt.rcParams['font.family'] = 'Ubuntu'
-plt.rcParams['font.serif'] = 'Ubuntu'
 plt.rcParams['font.monospace'] = 'Inconsolata Medium'
 plt.rcParams['font.size'] = 19
 plt.rcParams['axes.labelsize'] = 22
@@ -29,6 +27,11 @@ def get_args():
         description='Study the characteristics of the generated programs')
     parser.add_argument("data", help="Directory with statistics")
     parser.add_argument("output", help="Directory to store the figure.")
+    parser.add_argument("--patterns",
+                        default=False,
+                        action="store_true",
+                        help=("Generate figure that shows the frequency "
+                              "of patterns"))
     return parser.parse_args()
 
 
@@ -61,7 +64,7 @@ def plot_pattern_diagram(df, output_dir):
     df_melted = df.melt(var_name="Method", value_name="Patterns")
     df_melted["Method"] = df_melted["Method"].map(method_mapping)
     df_melted["Category"] = pd.cut(df_melted["Patterns"], bins=bins, labels=labels, right=True)
-    category_counts = df_melted.groupby(["Method", "Category"]).size().reset_index(name="Count")
+    category_counts = df_melted.groupby(["Method", "Category"], observed=True).size().reset_index(name="Count")
 
     sns.barplot(data=category_counts, x="Category", y="Count", hue="Method", palette="gray")
 
@@ -233,11 +236,12 @@ def print_statistics_table(title, sample_data, output_dir):
 
 def main():
     args = get_args()
-    df = load_data(args.data)
-    plot_pattern_diagram(df, args.output)
-
-    stats = get_stats_data(args.data)
-    print_statistics_table("Table 2b", stats, args.output)
+    if args.patterns:
+        df = load_data(args.data)
+        plot_pattern_diagram(df, args.output)
+    else:
+        stats = get_stats_data(args.data)
+        print_statistics_table("Table 2b", stats, args.output)
 
 
 if __name__ == "__main__":

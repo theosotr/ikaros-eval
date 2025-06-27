@@ -10,8 +10,6 @@ import seaborn as sns
 
 plt.style.use('default')
 sns.set(style="whitegrid")
-plt.rcParams['font.family'] = 'Ubuntu'
-plt.rcParams['font.serif'] = 'Ubuntu'
 plt.rcParams['font.monospace'] = 'Inconsolata Medium'
 plt.rcParams['font.size'] = 19
 plt.rcParams['axes.labelsize'] = 22
@@ -119,7 +117,6 @@ def plot_evolution_diagram(data, output_dir, log_scale):
     standardized_data = {}
 
     for key, times in plot_data.items():
-        print("Size of data: ", len(times))
         times = np.array(times)  # Convert to numpy array for easy processing
         times.sort()
         cumulative_counts = np.arange(1, len(times) + 1)
