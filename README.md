@@ -476,7 +476,8 @@ However, we can approximate the results and extract the key takeaways.
 ### Step 1: Generate programs
 
 Run the following commands to generate a total of 1,000 programs
-per target language; 500 using RefPG and 500 using RPG:
+per target language; 500 using RefPG and 500 using RPG
+(estimated running time: 30 minutes):
 
 
 ```
@@ -545,3 +546,113 @@ Key Takeaways:
 
 * SMT solving time increases 5x without a timeout, but remains relatively
   minor overall.
+
+
+## Re-running Experiments and Reproducing Tables and Figures with New Data (Optional)
+
+Up to this point,
+we have reproduced the tables and figures from our paper
+using the pre-generated evaluation data.
+However,
+you also have the option to re-run selected experiments yourself 
+in order to regenerate these results using fresh data.
+
+### RQ1: Comparing Pattern Generation Strategies
+
+To re-run the comparison between the two pattern generation strategies
+in terms of bug-finding effectiveness (Section 5.2),
+you can execute both approaches to test the correctness of
+the pattern-match coverage analyzers in `scalac` and `javac`.
+We exclude `ghc` from this comparison
+as no bugs were found in our previous evaluations.
+
+Use the following command to run each strategy on each target compiler
+for 600 seconds (i.e., 10 minutes).
+Notably,
+in our full evaluation,
+each configuration was run for 12 hours.
+
+```
+ikaros@2a72c8b56b74:~$ ./eval-scripts/run-ikaros.sh 600 new-results
+```
+
+The command above will take approximately 40 minutes to complete in total
+(10 minutes per strategy × 2 strategies × 2 compilers).
+
+You can shorten the runtime by adjusting the timeout.
+For example, to run each method for 5 minutes,
+simply change the first argument to 300.
+
+
+Once `ikaros` completes all runs,
+execute the following command to prepare the
+ data needed for plotting Figure 7.
+**NOTE**:
+ensure that the value of the `--duration` option (e.g., 600)
+matches the value used in the previous step
+(`./eval-scripts/run-ikaros.sh 600`),
+so the data aligns correctly with the intended experiment duration.
+
+```
+ikaros@2a72c8b56b74:~$ python eval-scripts/pickle-bug-evolution.py \
+  --ikaros-run out/Programs \
+  --time-dir new-results \
+  --duration 600 \
+  --output-dir new-results
+```
+
+Finally, run the following command to
+reproduce Table 1c and Figure 7 with the new data:
+
+```
+ikaros@2a72c8b56b74:~$ python eval-scripts/bug-evolution.py \
+  new-results/ \
+  eval-figures/ \
+  --avoid-log-scale
+```
+
+The above command outputs Table 1c in the standard output,
+while Figure 7 is found under `figures/evolution.pdf`.
+
+
+### RQ2: Collecting Statistics About the Generated Programs
+
+We now re-run the experiment for reproducing Figure 8 and Table 2b
+by generating a total of 1,000 programs
+per target language; 500 using RefPG and 500 using RPG
+(estimated running time: 30 minutes):
+
+```
+ikaros@2a72c8b56b74:~$ ikaros --language scala --pattern-gen construction --iterations 500
+ikaros@2a72c8b56b74:~$ ikaros --language scala --pattern-gen z3 --iterations 500
+ikaros@2a72c8b56b74:~$ ikaros --language java --pattern-gen construction --iterations 500
+ikaros@2a72c8b56b74:~$ ikaros --language java --pattern-gen z3 --iterations 500
+ikaros@2a72c8b56b74:~$ ikaros --language haskell --pattern-gen construction --iterations 500
+ikaros@2a72c8b56b74:~$ ikaros --language haskell --pattern-gen z3 --iterations 500
+```
+
+Then, we copy the statistics (see `.stats` files) from each `ikaros` run
+to the `new-results/`
+
+```
+ikaros@2a72c8b56b74:~$ ./eval-scripts/copy-stats.sh out new-results
+```
+
+Finally,
+it is time to reproduce Table 2b (along with the corresponding histograms
+in `figures/histograms`)
+and Figure 8 (located at `figures/patterns.pdf` inside the _host machine_)
+by running:
+
+``` bash
+# For Table 2b
+ikaros@2a72c8b56b74:~$ python eval-scripts/study-characteristics.py \
+  new-results eval-figures/
+
+# For Figure 8
+ikaros@2a72c8b56b74:~$ python eval-scripts/study-characteristics.py \
+  new-results eval-figures/ --patterns
+```
+
+
+Congratulations on completing the instructions of the artifact! :-)

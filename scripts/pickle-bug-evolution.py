@@ -29,7 +29,6 @@ def get_args():
 def extract_end_date(compiler, oracle, timedir):
     file_path = os.path.join(timedir, f"{compiler}_{oracle.lower()}")
     if not os.path.exists(file_path):
-        print(file_path)
         return None
 
     return os.path.getmtime(file_path)

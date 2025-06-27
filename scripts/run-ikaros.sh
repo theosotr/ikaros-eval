@@ -15,6 +15,7 @@ fi
 outdir=$2
 mkdir -p $outdir
 rm -f $outdir/*
+rm -rf out
 
 timeout $1 ikaros --language scala --pattern-gen construction
 touch $2/scalac_construction
