@@ -492,7 +492,7 @@ ikaros@2a72c8b56b74:~$ ikaros --language haskell --pattern-gen z3 --iterations 5
 
 After all runs have completed, copy the corresponding `.stats` files
 (located under `out/Programs`,
-as described in the [Usage](#usage) guide)
+as described in the [Example](#example-validating-the-pattern-match-coverage-analyzer-of-scala) guide)
 into a new directory named `new-results`.
 
 ```
