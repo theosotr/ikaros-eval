@@ -80,14 +80,43 @@ ikaros@a1a0025981b8:~$ ikaros --help
 Usage: ikaros [OPTIONS] --pattern-gen <PATTERN_GEN> --language <LANGUAGE>
 
 Options:
-  -p, --pattern-gen <PATTERN_GEN>  Name of the person to greet [possible values: z3, construction, mutation]
-  -l, --language <LANGUAGE>        Activate debug mode [possible values: haskell, scala, java]
-  -i, --iterations <ITERATIONS>    
-  -b, --batch-size <BATCH_SIZE>    [default: 16]
-  -r, --redundancy                 
-  -r, --reduce                     
-  -h, --help                       Print help
-  -V, --version                    Print version
+  -p, --pattern-gen <PATTERN_GEN>
+          trategy used to generate pattern-matching expressions and establish the test oracle.
+          
+          * construction: Refers to refinement-based pattern generation.
+          
+          * z3: Refers to random pattern generation using Z3 as the test oracle.
+          
+          * mutation: Uses semantic mutations to derive new programs from existing ones.
+          
+          [possible values: z3, construction, mutation]
+
+  -l, --language <LANGUAGE>
+          Target programming language for the generated programs
+          
+          [possible values: haskell, scala, java]
+
+  -i, --iterations <ITERATIONS>
+          Total number of programs to generate.
+          
+          If not specified, Ikaros will continue generating programs indefinitely.
+
+  -b, --batch-size <BATCH_SIZE>
+          Number of programs per batch sent to the compiler under test
+          
+          [default: 10]
+
+  -r, --redundancy
+          If provided, Ikaros also checks for false positives in redundancy diagnostics
+
+  -r, --reduce
+          If provided, Ikaros attempts to minimize bug-triggering programs via reduction
+
+  -h, --help
+          Print help (see a summary with '-h')
+
+  -V, --version
+          Print version
 ```
 
 ## Example: Validating the Pattern-Match Coverage Analyzer of Scala
