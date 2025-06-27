@@ -686,7 +686,8 @@ simply change the first argument to 300.
 Once `ikaros` completes all runs,
 execute the following command to prepare the
  data needed for plotting Figure 7.
-**NOTE**:
+
+**IMPORTANT NOTE**:
 ensure that the value of the `--duration` option (e.g., 600)
 matches the value used in the previous step
 (`./eval-scripts/run-ikaros.sh 600`),
