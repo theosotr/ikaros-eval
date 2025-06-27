@@ -60,7 +60,7 @@ To get the artifact, run:
 git clone --recursive https://github.com/theosotr/ikaros-eval
 ```
 
-The easiest way to get Hephaestus and all dependencies needed for evaluating 
+The easiest way to get `Ikaros` and all dependencies needed for evaluating 
 the artifact is to download a _pre-built_ Docker 
 image from DockerHub. Another option is to build the Docker 
 image locally.
