@@ -3,9 +3,6 @@
 This is the artifact for the conditionally accepted OOPSLA'25 paper titled
 "Validating Soundness and Completeness in Pattern-Match Coverage Analyzers".
 
-An archived version of the artifact is also available on Zenodo.
-See TODO.
-
 # Table of Contents
 
 - [Overview](#overview)
@@ -222,7 +219,7 @@ ikaros@a1a0025981b8:~$ ikaros --language scala \
 ```
 
 
-This now generates an output like so:
+This now generates files like so:
 
 ```
 out/
@@ -256,7 +253,7 @@ depending on the randomly generated inputs.
 
 ## Discovered bugs
 
-We provide a JSON file (`data/bugs.json`)
+We provide a JSON file (`data/bugs.json` in the root directory of the artifact)
 that contains detailed information about
 the bugs identified by `Ikaros` during our testing efforts.
 Each entry in the file corresponds to a distinct bug
@@ -366,7 +363,7 @@ Total               12        4         0         16
 ### Comparison of bug-finding capability
 
 To reproduce Table 1c and Figure 7, which compare the bug-finding effectiveness
- of the two pattern generation strategies,
+of the two pattern generation strategies (namely RefPG and RPG),
 execute the following command:
 
 ```
@@ -386,9 +383,9 @@ RefPG     36        0         0         36
 
 
 In addition, this script generates a figure that replicates Figure 7
- from the paper.
+from the paper.
 The resulting plot is saved to the
- host machine under `figures/evolution.pdf`.
+_host machine_ under `figures/evolution.pdf`.
 
 
 ## RQ2: Bug and Test Case Characteristics (Section 5.3)
@@ -507,7 +504,10 @@ However, we can approximate the results and extract the key takeaways.
 
 Run the following commands to generate a total of 1,000 programs
 per target language; 500 using RefPG and 500 using RPG
-(estimated running time: 30 minutes):
+
+Estimated running time: 30 minutes.
+Note that runs involving Scala may take longer,
+as `scalac` is significantly slower than the other compilers.
 
 
 ```

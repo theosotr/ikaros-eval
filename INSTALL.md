@@ -1,7 +1,7 @@
 To get the artifact, run:
 
 ```
-git clone --recursive https://github.com/CyrilFMoser/Ikaros
+git clone --recursive https://github.com/theosotr/ikaros-eval
 ```
 
 The easiest way to get Hephaestus and all dependencies needed for evaluating 
