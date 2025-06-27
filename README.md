@@ -45,7 +45,7 @@ repository: https://github.com/CyrilFMoser/Ikaros.
 
 # Requirements
 
-__Note: This artifact has been tested on a 64-bits Ubuntu machine and 
+__Note: This artifact has been tested on a 64-bits Ubuntu machine.
 Nevertheless, our Docker image works on any given operating system
 that supports Docker.__
 
